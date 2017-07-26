@@ -6,25 +6,24 @@
 		<artifactId>babasport</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>babasport-protal</artifactId>
+	<artifactId>babasport-service-cms</artifactId>
 	<packaging>war</packaging>
 
 
-
 	<!-- 依赖管理 -->
-	<!-- service 接口 实现类 -->
+	<!-- Dao 接口 实现类 -->
 	<dependencies>
+		<dependency>
+			<groupId>com.my.babasport</groupId>
+			<artifactId>babasport-dao</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- service 接口 实现类 -->
 		<dependency>
 			<groupId>com.my.babasport</groupId>
 			<artifactId>babasport-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<!-- Tomcat7 servlet-api -->
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jsp-api</artifactId>
-			<version>7.0.47</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

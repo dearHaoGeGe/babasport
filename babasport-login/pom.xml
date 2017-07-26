@@ -6,7 +6,7 @@
 		<artifactId>babasport</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>babasport-protal</artifactId>
+	<artifactId>babasport-login</artifactId>
 	<packaging>war</packaging>
 
 
