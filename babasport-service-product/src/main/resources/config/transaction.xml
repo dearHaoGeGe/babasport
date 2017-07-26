@@ -18,13 +18,13 @@
 		http://code.alibabatech.com/schema/dubbo        
 		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    	<!-- 读取多个properties -->
-		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		    <property name="locations">
-		        <list>
-		            <value>classpath:jdbc.properties</value>
-		        </list>
-		    </property>
-		</bean>
+	<!-- 事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 注解式开发 @Transaction -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>

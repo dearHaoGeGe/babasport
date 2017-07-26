@@ -18,13 +18,14 @@
 		http://code.alibabatech.com/schema/dubbo        
 		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    	<!-- 读取多个properties -->
-		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		    <property name="locations">
-		        <list>
-		            <value>classpath:jdbc.properties</value>
-		        </list>
-		    </property>
-		</bean>
+	<!-- 配置Druid -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<!-- 驱动 -->
+		<property name="driverClassName" value="${driverClassName}" />
+		<!-- url -->
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
 
 </beans>
