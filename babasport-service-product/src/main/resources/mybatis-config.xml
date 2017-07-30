@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- setting二级缓存 -->
+
+	<!-- 别名 -->
+	<typeAliases>
+		<package name="com.my.core.bean" />
+	</typeAliases>
+
+	<!-- Mapper位置和Spring不用配置 -->
+</configuration>

@@ -3,5 +3,42 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+    <!-- POST提交中文乱码过滤器 -->
+    <filter>
+        <filter-name>encoding</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encoding</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
 
+    <!-- SpringMVC -->
+    <servlet>
+        <servlet-name>console</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 默认：WEB-INF/[servlet-name]-servlet.xml -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:springmvc-console.xml</param-value>
+        </init-param>
+    </servlet>
+    
+    <!--
+    	配置规则：
+    	*.do   ：请求路径后缀.do拦截
+    	/*     ：所有 .jsp拦截	此配置一般情况下不使用
+    	/      ：所有 不包括.jsp	 包括.js .css .png	此配置使用（配置对静态资源放行）配置  *.shtml
+    	*.aspx ：（京东）（自定义）
+    -->
+    <servlet-mapping>
+        <servlet-name>console</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
