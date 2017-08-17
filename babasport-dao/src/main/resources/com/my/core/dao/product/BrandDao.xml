@@ -54,4 +54,39 @@
 			bbs_brand.id = #{id}
 	</select>
 	
+	<!-- 修改 -->
+	<update id="updateBrand" parameterType="Brand">
+		UPDATE bbs_brand
+		<set>
+			<if test="name != null">
+				bbs_brand.`name` = #{name},
+			</if>
+			<if test="description != null">
+				 bbs_brand.description = #{description},
+			</if>
+			<if test="imgUrl != null">
+				bbs_brand.img_url = #{imgUrl},
+			</if>
+			<if test="sort != null">
+				bbs_brand.sort = #{sort},
+			</if>
+			<if test="isDisplay != null">
+				bbs_brand.is_display = #{isDisplay}
+			</if>
+		</set>
+		<where>
+			bbs_brand.id = #{id}
+		</where>
+	</update>
+	
+	<!-- 批量删除 (1, 2, 3, 4) collection="array"只能接收array和list的其他的不可以，open="("以前括号开始，close=")"以后括号结束 ，separator=","每循环一次以逗号分割 -->
+	<delete id="deletes" parameterType="Long[]">
+		DELETE FROM bbs_brand
+		<where>
+			bbs_brand.id IN
+			<foreach collection="array" item="id" open="(" close=")" separator=",">
+				#{id}
+			</foreach>
+		</where>
+	</delete>
 </mapper>

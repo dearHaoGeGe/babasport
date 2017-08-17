@@ -1,5 +1,7 @@
 package com.my.core.service.product;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,24 +47,49 @@ public class BrandServiceImpl implements BrandService {
 		}
 
 		// 构建分页对象（当前页，每页数（自定义），总条数）
-		Pagination pagination = new Pagination(brandQuery.getPageNo(), brandQuery.getPageSize(),
-				brandDao.selectBrandCountByQuery(brandQuery));
+		Pagination pagination = new Pagination(brandQuery.getPageNo(), brandQuery.getPageSize(), brandDao.selectBrandCountByQuery(brandQuery));
 		// 设置结果集
 		pagination.setList(brandDao.selectBrandListQuery(brandQuery));
-		
-		String url="/brand/list.do";
+
+		String url = "/brand/list.do";
 		//分页在页面上展示<a onclick="product/list.do?&isDisplay=1&pageNo=2"/>
 		pagination.pageView(url, params.toString());
 
 		return pagination;
 	}
-	
+
 	/**
 	 * 通过id查询品牌 
 	 */
 	@Override
-	public Brand selectBrandById(Long id){
+	public Brand selectBrandById(Long id) {
 		return brandDao.selectBrandById(id);
+	}
+
+	/**
+	 * 修改
+	 */
+	@Override
+	public void updateBrand(Brand brand) {
+		brandDao.updateBrand(brand);
+	}
+
+	/**
+	 * 批量删除
+	 */
+	@Override
+	public void deletes(Long[] ids) {
+		brandDao.deletes(ids);
+	}
+
+	/**
+	 * 查询所有可见的品牌
+	 */
+	@Override
+	public List<Brand> selectBrandListByQuery(Integer isDisplay) {
+		BrandQuery brandQuery = new BrandQuery();
+		brandQuery.setIsDisplay(isDisplay);
+		return brandDao.selectBrandListQuery(brandQuery);
 	}
 
 }

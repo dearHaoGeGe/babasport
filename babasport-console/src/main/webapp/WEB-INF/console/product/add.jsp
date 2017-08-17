@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ include file="/back_page/head.jsp" %>
+<%@ include file="../head.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -42,15 +42,42 @@ $(function(){
 			$(ref_t).hide();
 			$(ref).show();
 			tObj = $(this);
-			if(ref == '#tab_2'){
+			if(ref == '#tab_3'){
 				var fck = new FCKeditor("productdesc");
 				fck.BasePath = "/res/fckeditor/";
 				fck.Height = 400 ;
+				fck.Config["ImageUploadURL"] = "/upload/uploadFck.do";
 				fck.ReplaceTextarea();
 			}
 		});
 	});
 });
+//上传图片
+function uploadPic(){
+	//上传图片 异步的  	Jquery.form.js
+	var options = {
+			url : "/upload/uploadPics.do",
+			type : "post",
+			dataType : "json",
+			success : function(data){
+				//多图片回显
+				var html = '<tr>'
+						 + '<td width="20%" class="pn-flabel pn-flabel-h"></td>'
+						 + '<td width="80%" class="pn-fcontent">';
+				for(var i=0;i<data.length;i++){
+					html += '<img width="100" height="100" src="' + data[i] + '" />'
+					     +  '<input type="hidden" name="imgUrl" value="' + data[i] + '"/>'
+				}
+					html += '<a href="javascript:;" class="pn-opt" onclick="jQuery(this).parents(\'tr\').remove()">删除</a>'
+						 +  '</td>'
+						 +  '</tr>';
+				//回显
+				$("#tab_2").append(html);
+				
+			}
+	}
+	$("#jvForm").ajaxSubmit(options);
+}
 </script>
 </head>
 <body>
@@ -63,8 +90,9 @@ $(function(){
 </div>
 <h2 class="h2_ch"><span id="tabs">
 <a href="javascript:void(0);" ref="#tab_1" title="基本信息" class="here">基本信息</a>
-<a href="javascript:void(0);" ref="#tab_2" title="商品描述" class="nor">商品描述</a>
-<a href="javascript:void(3);" ref="#tab_3" title="商品参数" class="nor">包装清单</a>
+<a href="javascript:void(0);" ref="#tab_2" title="商品图片" class="nor">商品图片</a>
+<a href="javascript:void(0);" ref="#tab_3" title="商品描述" class="nor">商品描述</a>
+<a href="javascript:void(0);" ref="#tab_4" title="包装清单" class="nor">包装清单</a>
 </span></h2>
 <div class="body-box" style="float:right">
 	<form id="jvForm" action="add.do" method="post" enctype="multipart/form-data">
@@ -93,9 +121,9 @@ $(function(){
 						商品品牌:</td><td width="80%" class="pn-fcontent">
 						<select name="brandId">
 							<option value="">请选择品牌</option>
-							<option value="1">依琦莲</option>
-							<option value="2">凯速（KANSOON）</option>
-							<option value="3">梵歌纳（vangona）</option>
+							<c:forEach items="${brands }" var="brand">
+								<option value="${brand.id }">${brand.name }</option>
+							</c:forEach>
 						</select>
 					</td>
 				</tr>
@@ -107,37 +135,22 @@ $(function(){
 				</tr>
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
-						材质:</td><td width="80%" class="pn-fcontent">
-							<input type="checkbox" value="1" name="feature"/>环保人棉
-							<input type="checkbox" value="1" name="feature"/>环保人棉
-							<input type="checkbox" value="1" name="feature"/>环保人棉
-							<input type="checkbox" value="1" name="feature"/>环保人棉
-							<input type="checkbox" value="1" name="feature"/>环保人棉
-							<input type="checkbox" value="1" name="feature"/>环保人棉
-					</td>
-				</tr>
-				<tr>
-					<td width="20%" class="pn-flabel pn-flabel-h">
 						<span class="pn-frequired">*</span>
 						颜色:</td><td width="80%" class="pn-fcontent">
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
-							<input type="checkbox" value="9" name="color"/>西瓜红
+							<c:forEach items="${colors }" var="color">
+								<input type="checkbox" value="${color.id }" name="colors"/>${color.name }
+							</c:forEach>
 					</td>
 				</tr>
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						<span class="pn-frequired">*</span>
 						尺码:</td><td width="80%" class="pn-fcontent">
-						<input type="checkbox" name="size" value="S"/>S
-						<input type="checkbox" name="size" value="M"/>M
-						<input type="checkbox" name="size" value="L"/>L
-						<input type="checkbox" name="size" value="XL"/>XL
-						<input type="checkbox" name="size" value="XXL"/>XXL
+						<input type="checkbox" name="sizes" value="S"/>S
+						<input type="checkbox" name="sizes" value="M"/>M
+						<input type="checkbox" name="sizes" value="L"/>L
+						<input type="checkbox" name="sizes" value="XL"/>XL
+						<input type="checkbox" name="sizes" value="XXL"/>XXL
 					</td>
 				</tr>
 				<tr>
@@ -148,6 +161,8 @@ $(function(){
 						<input type="checkbox" name="isHot" value="1"/>热卖
 					</td>
 				</tr>
+			</tbody>
+			<tbody id="tab_2" style="display: none">
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h">
 						<span class="pn-frequired">*</span>
@@ -159,20 +174,18 @@ $(function(){
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h"></td>
 						<td width="80%" class="pn-fcontent">
-						<img width="100" height="100" id="product_url"/>
-						<input type="hidden" name="picPath" id="product_path"/>
-						<input type="file" onchange="uploadPic()" name="pic"/>
+						<input type="file" onchange="uploadPic()" name="pics" multiple="multiple"/>
 					</td>
 				</tr>
 			</tbody>
-			<tbody id="tab_2" style="display: none">
+			<tbody id="tab_3" style="display: none">
 				<tr>
 					<td >
 						<textarea rows="10" cols="10" id="productdesc" name="description"></textarea>
 					</td>
 				</tr>
 			</tbody>
-			<tbody id="tab_3" style="display: none">
+			<tbody id="tab_4" style="display: none">
 				<tr>
 					<td >
 						<textarea rows="15" cols="136" id="productList" name="packageList"></textarea>

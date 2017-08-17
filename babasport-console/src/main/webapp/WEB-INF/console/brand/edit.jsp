@@ -15,7 +15,9 @@
 				type : "post",
 				dataType : "json",
 				success : function (data) {
-					//data
+					//data.url	data.path
+					$("#allUrl").attr("src", data.url);
+					$("#imgUrl").val(data.url);
 				}
 		};
 		$("#jvForm").ajaxSubmit(options);
@@ -31,7 +33,7 @@
 	<div class="clear"></div>
 </div>
 <div class="body-box" style="float:right">
-	<form id="jvForm" action="o_save.shtml" method="post">
+	<form id="jvForm" action="/brand/edit.do" method="post">
 		<input type="hidden" value="${brand.id}" name="id"/>
 		<table cellspacing="1" cellpadding="2" width="100%" border="0" class="pn-ftable">
 			<tbody>
@@ -53,7 +55,8 @@
 				<tr>
 					<td width="20%" class="pn-flabel pn-flabel-h"></td>
 						<td width="80%" class="pn-fcontent">
-						<img width="100" height="100" id="imgSize1ImgSrc"/>
+						<img width="100" height="100" id="allUrl"/>
+						<input type="hidden" name="imgUrl" id="imgUrl"/>
 						<input type="file" name="pic" onchange="uploadPic()"/>
 					</td>
 				</tr>

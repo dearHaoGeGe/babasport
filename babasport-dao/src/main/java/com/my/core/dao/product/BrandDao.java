@@ -24,4 +24,14 @@ public interface BrandDao {
 	 * 通过id查询品牌
 	 */
 	Brand selectBrandById(Long id);
+	
+	/**
+	 * 修改
+	 */
+	void updateBrand(Brand brand);
+	
+	/**
+	 * 批量删除
+	 */
+	void deletes(Long[] ids);
 }

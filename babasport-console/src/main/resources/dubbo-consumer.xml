@@ -1,8 +1,4 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:task="http://www.springframework.org/schema/task" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
 		http://www.springframework.org/schema/mvc 
@@ -21,19 +17,23 @@
 	<!-- dubbo的消费方 -->
 	<!-- 计算机名 -->
 	<dubbo:application name="babasport-console" />
-	<!-- 注册中心 -->
-	<dubbo:registry address="192.168.42.128:2181" protocol="zookeeper"
-		check="false" />
+	<!-- 注册中心 address：dubbo的服务器地址 -->
+	<dubbo:registry address="192.168.11.128:2181" protocol="zookeeper" check="false" />
 	<!-- 暂时开始使用本地提供的 -->
 	<!-- <dubbo:registry address="N/A" /> -->
 	<!-- 获取接口和实现类 -->
-	<dubbo:reference interface="com.my.core.service.TestTbService"
-		id="testTbService" check="false" />
+	<dubbo:reference interface="com.my.core.service.TestTbService" id="testTbService" check="false" />
 	<!-- 暂时开始使用本地提供的 -->
-	<!-- <dubbo:reference interface="com.my.core.service.TestTbService" id="testTbService" 
-		url="dubbo://127.0.0.1:20880"/> -->
-	<dubbo:reference interface="com.my.core.service.product.BrandService"
-		id="brandService" check="false" />
+	<!-- <dubbo:reference interface="com.my.core.service.TestTbService" id="testTbService" url="dubbo://127.0.0.1:20880"/> -->
+	<dubbo:reference interface="com.my.core.service.product.BrandService" id="brandService" check="false" />
+
+	<dubbo:reference interface="com.my.core.service.product.UploadService" id="uploadService" check="false" />
+
+	<dubbo:reference interface="com.my.core.service.product.ProductService" id="productService" check="false" />
+	
+	<dubbo:reference interface="com.my.core.service.product.ColorService" id="colorService" check="false" />
+	
+	<dubbo:reference interface="com.my.core.service.product.SkuService" id="skuService" check="false" />
 
 	<!-- 全局统一设置超时时间 默认为1S 现在改为10分钟 -->
 	<dubbo:consumer timeout="600000" />

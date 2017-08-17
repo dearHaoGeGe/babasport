@@ -14,27 +14,9 @@
 		http://code.alibabatech.com/schema/dubbo        
 		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<!-- dubbo服务提供方配置 -->
-
-	<!-- 配置提供方名称 计算机名 -->
-	<dubbo:application name="babasport-service-product" />
-
-	<!-- 配置注册中心 address：dubbo的服务器地址 -->
-	<!-- <dubbo:registry address="192.168.42.128:2181,192.168.42.129:2181,192.168.42.130:2181" protocol="zookeeper" /> --><!-- 如果有多台服务器可以这样写 -->
-	<dubbo:registry address="192.168.11.128:2181" protocol="zookeeper" /> <!-- zookeeper真是发布时的地址 -->
-
-	<!-- 直连N/A表示没有注册中心 -->
-	<!-- <dubbo:registry address="N/A" /> -->
-
-	<!-- 设置端口号 默认 20880 -->
-	<dubbo:protocol port="20880" name="dubbo" />
-
-	<!-- 暴露的接口 -->
-	<dubbo:service interface="com.my.core.service.TestTbService" ref="testTbService" />
-	<dubbo:service interface="com.my.core.service.product.BrandService" ref="brandService" />
-	<dubbo:service interface="com.my.core.service.product.UploadService" ref="uploadService" />
-	<dubbo:service interface="com.my.core.service.product.ProductService" ref="productService" />
-	<dubbo:service interface="com.my.core.service.product.ColorService" ref="colorService" />
-	<dubbo:service interface="com.my.core.service.product.SkuService" ref="skuService" />
+	<!-- Solr的客户端 -->
+	<bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+		<constructor-arg value="http://192.168.11.128:8080/solr" />
+	</bean>
 
 </beans>
