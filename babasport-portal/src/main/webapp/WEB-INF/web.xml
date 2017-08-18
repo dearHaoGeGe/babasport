@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<!-- POST提交   -->
+	<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/</url-pattern>
+	</filter-mapping>
+	
+	<!-- Springmvc -->
+	<servlet>
+		<servlet-name>portal</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 默认 ： WEB-INF/[serlet-name]-servlet.xml -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:springmvc-portal.xml</param-value>
+		</init-param>
+		<!-- 
+			1)load-on-startup元素标记容器是否在启动的时候就加载这个servlet(实例化并调用其init()方法)。
+			2)它的值必须是一个整数，表示servlet应该被载入的顺序
+			2)当值为0或者大于0时，表示容器在应用启动时就加载并初始化这个servlet；
+			3)当值小于0或者没有指定时，则表示容器在该servlet被选择时才会去加载。
+			4)正数的值越小，该servlet的优先级越高，应用启动时就越先加载。
+			5)当值相同时，容器就会自己选择顺序来加载。
+		 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<!-- 配置规则 
+	*.do  : 请求路径  后缀 .do
+	/*    : 所有  .jsp拦截   此配置不使用
+	/     : 所有 不包括.jsp  包括.js.css.png.  此配置使用(配置对静态资源放行）配置 *.shtml
+	*.aspx (京东） （自定义）
+	-->
+	<servlet-mapping>
+		<servlet-name>portal</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+</web-app>

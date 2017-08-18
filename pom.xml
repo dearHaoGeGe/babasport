@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>babasport-protal</module>
+		<module>babasport-portal</module>
 		<module>babasport-console</module>
 		<module>babasport-login</module>
 		<module>babasport-pojo</module>

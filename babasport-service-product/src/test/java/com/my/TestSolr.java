@@ -41,7 +41,7 @@ public class TestSolr {
 		doc.setField("name", "徐铭晨");
 		//保存
 		server.add(doc);
-		//server.deleteById("Fuck You");	//通过id进行删除
+//		server.deleteById("288");	//通过id进行删除
 		server.commit();
 	}
 
