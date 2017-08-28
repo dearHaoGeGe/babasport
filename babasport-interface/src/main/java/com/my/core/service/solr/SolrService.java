@@ -6,9 +6,12 @@ public interface SolrService {
 
 	/**
 	 * 商品检索
-	 * 
-	 * @return
 	 */
-	Pagination selectPaginationFromSolr(Integer pageNo, String keyWord);
+	Pagination selectPaginationFromSolr(Integer pageNo, String keyWord, Long brandId, String price);
+	
+	/**
+	 * 保存商品信息到solr服务器中
+	 */
+	void insertProduct(Long id);
 
 }

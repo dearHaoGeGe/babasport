@@ -1,6 +1,10 @@
 package com.my.core.service.product;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +14,7 @@ import com.my.core.bean.product.BrandQuery;
 import com.my.core.dao.product.BrandDao;
 
 import cn.itcast.common.page.Pagination;
+import redis.clients.jedis.Jedis;
 
 /**
  * 品牌
@@ -19,6 +24,9 @@ public class BrandServiceImpl implements BrandService {
 
 	@Autowired
 	private BrandDao brandDao;
+
+	@Autowired
+	private Jedis jedis;
 
 	/**
 	 * 返回分页对象
@@ -72,6 +80,25 @@ public class BrandServiceImpl implements BrandService {
 	@Override
 	public void updateBrand(Brand brand) {
 		brandDao.updateBrand(brand);
+		//保存品牌到Redis中
+		jedis.hset("brand", String.valueOf(brand.getId()), brand.getName());
+	}
+
+	/**
+	 * 查询Redis中的品牌结果集
+	 */
+	@Override
+	public List<Brand> selectBrandListFromRedis() {
+		List<Brand> brands = new ArrayList<>();
+		Map<String, String> hgetAll = jedis.hgetAll("brand"); //取出为brand的key
+		Set<Entry<String, String>> entrySet = hgetAll.entrySet();
+		for (Entry<String, String> entry : entrySet) {
+			Brand brand = new Brand();
+			brand.setId(Long.valueOf(entry.getKey()));
+			brand.setName(entry.getValue());
+			brands.add(brand);
+		}
+		return brands;
 	}
 
 	/**

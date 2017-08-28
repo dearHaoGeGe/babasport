@@ -1,0 +1,55 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/task
+   		http://www.springframework.org/schema/task/spring-task-4.0.xsd
+		http://code.alibabatech.com/schema/dubbo        
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 配置activeMQ -->
+	<!-- 配置原厂家的工厂 由apache提供 -->
+	<bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<!-- 连接协议 tcp://192.168.1.100:61616 -->
+		<property name="brokerURL" value="tcp://192.168.1.100:61616" />
+		<property name="userName" value="admin" />
+		<property name="password" value="admin" />
+	</bean>
+
+	<!-- 配置原厂家的工厂的连接池 由apache提供 -->
+	<bean id="pooledConnectionFactoryBean" class="org.apache.activemq.pool.PooledConnectionFactoryBean">
+		<!-- 上面的工厂 -->
+		<property name="connectionFactory" ref="activeMQConnectionFactory" />
+		<!-- 连接数 -->
+		<property name="maxConnections" value="2" />
+	</bean>
+
+	<!-- Spring管理apache提供的原工厂 -->
+	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+		<!-- 原工厂 -->
+		<property name="targetConnectionFactory" ref="pooledConnectionFactoryBean" />
+	</bean>
+
+	<!-- JmsTemplate操作ActiveMQ 某个地点 目标 -->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<!-- 注入Spring的工厂 -->
+		<property name="connectionFactory" ref="connectionFactory" />
+		<!-- 默认目标 商品ID -->
+		<property name="defaultDestinationName" value="productId" />
+		<!-- 
+			默认不设置是队列：设置就是发送主题
+			pub：主题       发布  / 订阅
+			sub：subject	订阅
+		 	Domain：模型
+		 -->
+		<property name="pubSubDomain" value="true"/>
+	</bean>
+
+</beans>

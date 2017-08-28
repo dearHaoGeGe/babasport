@@ -16,15 +16,47 @@
 <script src="/res/js/com.js"></script>
 <script type="text/javascript">
 
+//全局变量
+var keyWord = '${keyWord}';
+var price = '${param.price}';
+var brandId = '${param.brandId}';
+
 //搜索
 function searchKeyWord() {
 	//刷新页面
 	window.location.href = "/product/list?keyWord=" + $("#keyWord").val();
 }
 
+//点击品牌过滤	id == 品牌ID
+function fqBrand(id) {
+	//判断是否有价格
+	if(price != ''){
+		//刷新页面
+		window.location.href = "/product/list?keyWord=" + keyWord + "&brandId=" + id + "&price=" + price;
+	} else {
+		//刷新页面
+		window.location.href = "/product/list?keyWord=" + keyWord + "&brandId=" + id;
+	}
+}
+
+//点击价格	  id == 价格区间
+function fqPrice(id) {
+	//判断是否已经点击品牌
+	if(brandId != ''){
+		//刷新页面
+		window.location.href = "/product/list?keyWord=" + keyWord + "&brandId="+ brandId + "&price=" + id;
+	} else {
+		//刷新页面
+		window.location.href = "/product/list?keyWord=" + keyWord + "&price=" + id;
+	}
+
+}
+
 //登陆
 function login(){
-	window.location.href = "../buyer/login.jsp";
+	//alert(window.location.search);		//结果：?keyWord=瑜伽服
+	//alert(window.location.pathname);	//结果：/product/list
+	window.location.href = "http://localhost:8085/shopping/login.aspx?returnUrl=" + window.location.href;
 }
 </script>
 </head>
@@ -274,35 +306,44 @@ function login(){
 
 		<h2 class="h2 h2_filter mt"><em title="商品筛选">商品筛选</em><cite><a href="javascript:void(0);" id="filterRest" title="重置筛选条件">重置筛选条件</a></cite></h2>
 			<ul class="uls filter">
-				<li><label>已选条件：</label>
-				<p class="sel">
-					<a href="javascript:void(0);">
-					<em>品牌：</em>依琦莲
-					<cite title="关闭此筛选条件">X</cite></a>
-				</p>
-				</li>
-				<li><b>品牌：</b><p>
-					<a href="javascript:void(0);" title="不限" class="here">不限</a>
-					<a href="javascript:void(0);" title="依琦莲">依琦莲</a>
-					<a href="javascript:void(0);" title="凯速（KANSOON）">凯速（KANSOON）</a>
-					<a href="javascript:void(0);" title="梵歌纳（vangona）">梵歌纳（vangona）</a>
-					<a href="javascript:void(0);" title="菩媞">菩媞</a>
-					<a href="javascript:void(0);" title="伽美斯（Jamars）">伽美斯（Jamars）</a>
-					<a href="javascript:void(0);" title="金啦啦">金啦啦</a>
-					<a href="javascript:void(0);" title="伊朵莲">伊朵莲</a>
-					<a href="javascript:void(0);" title="喜悦瑜伽">喜悦瑜伽</a>
-					<a href="javascript:void(0);" title="路伊梵（LEFAN）">路伊梵（LEFAN）</a>
-					<a href="javascript:void(0);" title="来尔瑜伽（LaiErYoGA）">来尔瑜伽（LaiErYoGA）</a>
-				</p></li>
-				<li><b>价格：</b><p>
-					<a href="javascript:void(0);" title="不限" class="here">不限</a>
-					<a href="javascript:void(0);" title="1-99">0-79</a>
-					<a href="javascript:void(0);" title="100-199">80-199</a>
-					<a href="javascript:void(0);" title="200-499">200-299</a>
-					<a href="javascript:void(0);" title="200-499">300-499</a>
-					<a href="javascript:void(0);" title="200-499">500-599</a>
-					<a href="javascript:void(0);" title="200-499">600以上</a>
-				</p></li>
+				<c:if test="${fn:length(map) != 0}">
+					<li>
+						<label>已选条件：</label>
+						<p class="sel">
+							<c:forEach items="${map}" var="m">
+									<a href="javascript:void(0);">
+										<em>${m.key}：</em>${m.value}
+										<cite title="关闭此筛选条件">X</cite>
+									</a>
+							</c:forEach>
+						</p>
+					</li>
+				</c:if>
+				<c:if test="${empty brandId}">
+					<li>
+						<b>品牌：</b>
+						<p>
+							<a href="javascript:void(0);" title="不限" class="here">不限</a>
+							<c:forEach items="${brands}" var="brand">
+								<a href="javascript:void(0);" title="依琦莲" onclick="fqBrand('${brand.id}')">${brand.name}</a>
+							</c:forEach>
+						</p>
+					</li>
+				</c:if>
+				<c:if test="${empty price}">
+					<li>
+						<b>价格：</b>
+						<p>
+							<a href="javascript:void(0);" title="不限" class="here">不限</a>
+							<a href="javascript:void(0);" title="1-99" onclick="fqPrice('0-79')">0-79</a>
+							<a href="javascript:void(0);" title="100-199" onclick="fqPrice('80-199')">80-199</a>
+							<a href="javascript:void(0);" title="200-499" onclick="fqPrice('200-299')">200-299</a>
+							<a href="javascript:void(0);" title="200-499" onclick="fqPrice('300-499')">300-499</a>
+							<a href="javascript:void(0);" title="200-499" onclick="fqPrice('500-599')">500-599</a>
+							<a href="javascript:void(0);" title="200-499" onclick="fqPrice('600')">600以上</a>
+						</p>
+					</li>
+				</c:if>
 				<li><b>类型：</b><p>
 					<a href="javascript:void(0);" title="不限" class="here">不限</a>
 					<a href="javascript:void(0);" title="瑜伽服">瑜伽服</a>
@@ -337,13 +378,13 @@ function login(){
 				<ul class="uls i_150x150 x4_150x150b">
 					<c:forEach items="${pagination.list}" var="product">
 						<li>
-							<a href="productDetail.jsp" title="瑜伽服" target="_blank" class="pic">
+							<a href="javascript:;" onclick="window.open('/product/detail?id=${product.id}')" title="瑜伽服" class="pic">
 								<img src="${product.imgUrl}" alt="瑜伽服" />
 							</a>
 							<dl>
 								<!-- dt 10个文字+... -->
 								<dt>
-									<a href="productDetail.jsp" title="依琦莲2014瑜伽服套装新款" target="_blank">
+									<a href="javascript:;" onclick="window.open('http://localhost:8084/html/product/${product.id}.html')" title="依琦莲2014瑜伽服套装新款" >
 										${product.name}
 									</a>
 								</dt>

@@ -25,5 +25,13 @@
 			<artifactId>babasport-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
+		<!-- Tomcat7 servlet-api -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jsp-api</artifactId>
+			<version>7.0.47</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

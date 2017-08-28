@@ -37,6 +37,9 @@
 	
 	<!-- 换服务了service-solr -->
 	<dubbo:reference interface="com.my.core.service.solr.SolrService" id="solrService" check="false" />
+	
+	<!-- 换服务了service-cms -->
+	<dubbo:reference interface="com.my.core.service.cms.CmsService" id="cmsService" check="false" />
 
 	<!-- 全局统一设置超时时间 默认为1S 现在改为10分钟 -->
 	<dubbo:consumer timeout="600000" />
