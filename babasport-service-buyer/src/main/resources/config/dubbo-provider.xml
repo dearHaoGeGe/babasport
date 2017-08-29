@@ -14,21 +14,23 @@
 		http://code.alibabatech.com/schema/dubbo        
 		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<!-- dubbo的消费方 -->
-	<!-- 计算机名 -->
-	<dubbo:application name="babasport-login" />
-	<!-- 注册中心 address：dubbo的服务器地址 -->
-	<dubbo:registry address="192.168.11.128:2181" protocol="zookeeper" check="false" />
-	<!-- 暂时开始使用本地提供的 -->
-	<!-- <dubbo:registry address="N/A" /> -->
-	<!-- 获取接口和实现类 -->
-	<dubbo:reference interface="com.my.core.service.TestTbService" id="testTbService" check="false" />
-	<!-- 暂时开始使用本地提供的 -->
-	<!-- <dubbo:reference interface="com.my.core.service.TestTbService" id="testTbService" url="dubbo://127.0.0.1:20880"/> -->
-	
-	<!-- 换服务了service-cms -->
-	<dubbo:reference interface="com.my.core.service.user.BuyerService" id="buyerService" check="false" />
+	<!-- dubbo服务提供方配置 -->
 
-	<!-- 全局统一设置超时时间 默认为1S 现在改为10分钟 -->
-	<dubbo:consumer timeout="600000" />
+	<!-- 配置提供方名称 计算机名 -->
+	<dubbo:application name="babasport-service-buyer" />
+
+	<!-- 配置注册中心 address：dubbo的服务器地址 -->
+	<!-- <dubbo:registry address="192.168.42.128:2181,192.168.42.129:2181,192.168.42.130:2181" protocol="zookeeper" /> --><!-- 如果有多台服务器可以这样写 -->
+	<dubbo:registry address="192.168.11.128:2181" protocol="zookeeper" /> <!-- zookeeper真是发布时的地址 -->
+
+	<!-- 直连N/A表示没有注册中心 -->
+	<!-- <dubbo:registry address="N/A" /> -->
+
+	<!-- 设置端口号 默认 20883 -->
+	<dubbo:protocol port="20883" name="dubbo" />
+
+	<!-- 暴露的接口 -->
+	<dubbo:service interface="com.my.core.service.user.BuyerService" ref="buyerService" />
+
+
 </beans>
