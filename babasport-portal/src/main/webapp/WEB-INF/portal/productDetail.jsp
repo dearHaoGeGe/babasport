@@ -125,7 +125,7 @@ function addCart(){
 }
 //立即购买
 function buy(){
-	window.location.href='cart.jsp';
+	window.location.href='/shopping/buyerCart?skuId=' + skuId + '&amount=' + $("#num").val();
 }
 </script>
 </head>

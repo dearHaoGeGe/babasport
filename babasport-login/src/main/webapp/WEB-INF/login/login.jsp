@@ -37,7 +37,7 @@
 			<input type="hidden" name="returnUrl" value="${param.returnUrl}"/>
 			<%-- <input type="text" value="${param.returnUrl}"/> --%>
 			<ul class="uls form">
-			<li id="errorName" class="errorTip" style="display:none">${error}</li>
+			<li id="errorName" class="errorTip" <c:if test="${empty error}">style="display:none"</c:if>>${error}</li>
 			<li><label for="username">用户名：</label>
 				<span class="bg_text">
 					<input type="text" id="username" name="username" maxLength="100" />

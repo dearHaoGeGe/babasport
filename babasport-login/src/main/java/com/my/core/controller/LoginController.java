@@ -3,15 +3,22 @@ package com.my.core.controller;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.my.common.utils.RequestUtils;
 import com.my.core.bean.user.Buyer;
 import com.my.core.service.user.BuyerService;
+import com.my.core.service.user.SessionProvider;
 
 /**
  * 登录
@@ -24,6 +31,9 @@ public class LoginController {
 
 	@Autowired
 	private BuyerService buyerService;
+
+	@Autowired
+	private SessionProvider sessionProvider;
 
 	/**
 	 * 去登陆页面
@@ -39,7 +49,7 @@ public class LoginController {
 	 * 提交表单登录
 	 */
 	@RequestMapping(value = "/shopping/login.aspx", method = RequestMethod.POST)
-	public String login(String username, String password, String returnUrl, Model model) {
+	public String login(String username, String password, String returnUrl, Model model, HttpServletRequest request, HttpServletResponse response) {
 		//判断用户名不能为空
 		if (null != username) {
 			//判断密码不能为空
@@ -49,8 +59,10 @@ public class LoginController {
 				if (null != buyer) {
 					//密码必须正确
 					if (encodePassword(password).equals(buyer.getPassword())) {
-						//保存用户名到session中
+						//保存用户名到session中	key=csessionid(随便起名)
+						sessionProvider.setAttribute(RequestUtils.getCSESSIONID(request, response), buyer.getUsername());
 						//回跳到之前访问的页面
+						return "redirect:" + returnUrl;
 					} else {
 						model.addAttribute("error", "密码必须正确");
 					}
@@ -86,5 +98,25 @@ public class LoginController {
 			e.printStackTrace();
 		}
 		return new String(encodeHex);
+	}
+
+	/**
+	 * 判断用户是否登录
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/shopping/isLogin.aspx")
+	public @ResponseBody MappingJacksonValue isLogin(String callback, HttpServletRequest request, HttpServletResponse response) {
+		String result = "0";
+		//从redis服务器中获取用户名
+		String username = sessionProvider.getAttribute(RequestUtils.getCSESSIONID(request, response));
+		if (null != username) { //如果不为空，就是登录状态
+			result = "1";
+		}
+		//jsonp返回值
+		MappingJacksonValue mjv = new MappingJacksonValue(result);
+		mjv.setJsonpFunction(callback);
+		return mjv;
 	}
 }

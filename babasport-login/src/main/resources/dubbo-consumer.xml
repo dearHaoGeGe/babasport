@@ -28,6 +28,8 @@
 	
 	<!-- 换服务了service-cms -->
 	<dubbo:reference interface="com.my.core.service.user.BuyerService" id="buyerService" check="false" />
+	
+	<dubbo:reference interface="com.my.core.service.user.SessionProvider" id="sessionProvider" check="false" />
 
 	<!-- 全局统一设置超时时间 默认为1S 现在改为10分钟 -->
 	<dubbo:consumer timeout="600000" />

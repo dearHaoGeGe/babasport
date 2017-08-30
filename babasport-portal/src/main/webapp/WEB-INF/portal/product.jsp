@@ -21,6 +21,25 @@ var keyWord = '${keyWord}';
 var price = '${param.price}';
 var brandId = '${param.brandId}';
 
+//初始化异步请求，判断用户是否登录
+$(function () {
+	$.ajax({
+		url : "http://localhost:8085/shopping/isLogin.aspx",
+		type : "post",
+		dataType : "jsonp",
+		success : function (data) {
+			//alert(data);
+			if(data == 1){
+				$("#login").hide();
+				$("#register").hide();
+			} else {
+				$("#logout").hide();
+				$("#myOrder").hide();
+			}
+		}
+	});
+});
+
 //搜索
 function searchKeyWord() {
 	//刷新页面
@@ -56,7 +75,7 @@ function fqPrice(id) {
 function login(){
 	//alert(window.location.search);		//结果：?keyWord=瑜伽服
 	//alert(window.location.pathname);	//结果：/product/list
-	window.location.href = "http://localhost:8085/shopping/login.aspx?returnUrl=" + window.location.href;
+	window.location.href = "http://localhost:8085/shopping/login.aspx?returnUrl=" + encodeURIComponent(window.location.href);
 }
 </script>
 </head>
@@ -69,10 +88,10 @@ function login(){
 	</p>
 	<ul class="r uls">
 	<li class="dev">您好,欢迎来到新巴巴运动网！</li>
-	<li class="dev"><a href="javascript:void(0)" onclick="login()"  title="登陆">[登陆]</a></li>
-	<li class="dev"><a href="javascript:void(0)" onclick="register()" title="免费注册">[免费注册]</a></li>
-	<li class="dev"><a href="javascript:void(0)" onclick="logout()" title="退出">[退出]</a></li>
-	<li class="dev"><a href="javascript:void(0)" onclick="myOrder()" title="我的订单">我的订单</a></li>
+	<li class="dev" id="login"><a href="javascript:void(0)" onclick="login()"  title="登陆">[登陆]</a></li>
+	<li class="dev" id="register"><a href="javascript:void(0)" onclick="register()" title="免费注册">[免费注册]</a></li>
+	<li class="dev" id="logout"><a href="javascript:void(0)" onclick="logout()" title="退出">[退出]</a></li>
+	<li class="dev" id="myOrder"><a href="javascript:void(0)" onclick="myOrder()" title="我的订单">我的订单</a></li>
 	<li class="dev"><a href="#" title="在线客服">在线客服</a></li>
 	<li class="dev after"><a href="#" title="English">English</a></li>
 	</ul>

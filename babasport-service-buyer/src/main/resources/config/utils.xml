@@ -18,40 +18,10 @@
 		http://code.alibabatech.com/schema/dubbo        
 		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<!-- 扫描 -->
-	<context:component-scan base-package="com.my" />
-	
-	<!-- 对静态资源放行 -->
-	<!-- <mvc:resources location="/res/" mapping="/res/**"/> -->
-
-	<!-- 处理器映射器、适配器 -->
-	<mvc:annotation-driven conversion-service="conversionService"/>
-
-	<!-- 视图解析器 -->
-	<bean id="jspViewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<!-- 页面简写的前缀 -->
-		<!-- <property name="prefix" value="/WEB-INF/back_page/" /> -->
-		<property name="prefix" value="/WEB-INF/login/" />
-		<!-- 页面简写的后缀 -->
-		<property name="suffix" value=".jsp" />
+	<!-- Session提供类 -->
+	<bean id="sessionProvider" class="com.my.core.service.user.SessionProviderImpl">
+		<!-- 保存的时间 -->
+		<!-- <property name="exp" value="60" /> -->
 	</bean>
-
-	<!-- 配置转换器 -->
-	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-		<property name="converters">
-			<list>
-				<!-- <bean class="自定义日期转换类"></bean> -->
-				<!-- 去掉前后空格 -->
-				<bean class="com.my.common.convertion.CustomConverter" />
-			</list>
-		</property>
-	</bean>
-
-	<!-- 上传图片 -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
-
-	<!-- 导入dubbo消费者 -->
-	<import resource="dubbo-consumer.xml" />
 
 </beans>
