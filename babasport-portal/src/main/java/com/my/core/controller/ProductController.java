@@ -185,7 +185,7 @@ public class ProductController {
 				response.addCookie(cookie);
 			}
 		}
-		return "redirect:";
+		return "redirect:/shopping/toCart";
 	}
 
 	/**
@@ -197,30 +197,40 @@ public class ProductController {
 	public String toCart(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BuyerCart buyerCart = null;
 
-		//1、判断用户是否登录
-		String username = sessionProvider.getAttribute(RequestUtils.getCSESSIONID(request, response));
-		if (null != username) {
-			//3、登录获取redis中购物车
-			buyerCart = buyerService.selectBuyerCartFromRedis(username);
-		} else {
-			//2、非登录获取cookie中购物车
-			ObjectMapper om = new ObjectMapper();
-			om.setSerializationInclusion(Include.NON_NULL); //去除属性为空的
-			Cookie[] cookies = request.getCookies();
-			if (null != cookies && cookies.length > 0) {
-				for (Cookie c : cookies) {
-					if (Constants.BUYER_CART.equals(c.getName())) {
-						buyerCart = om.readValue(c.getValue(), BuyerCart.class);
-					}
+		ObjectMapper om = new ObjectMapper();
+		om.setSerializationInclusion(Include.NON_NULL); //去除属性为空的
+		Cookie[] cookies = request.getCookies();
+		if (null != cookies && cookies.length > 0) {
+			for (Cookie c : cookies) {
+				if (Constants.BUYER_CART.equals(c.getName())) {
+					buyerCart = om.readValue(c.getValue(), BuyerCart.class);
 				}
 			}
 		}
 
-		List<BuyerItem> items = buyerCart.getItems();
-		if (items.size() > 0) {
-			//4、为购物车加载数据
-			for (BuyerItem buyerItem : items) {
-				buyerItem.setSku(buyerService.selectSkuById(buyerItem.getSku().getId()));
+		//1、判断用户是否登录
+		String username = sessionProvider.getAttribute(RequestUtils.getCSESSIONID(request, response));
+		if (null != username) {
+			if (null != buyerCart) {
+				//把cookie中的购物车保存到redis，整个购物车全追加到redis
+				buyerService.insertBuyerCartToRedis(buyerCart, username);
+			}
+			//3、登录获取redis中购物车
+			buyerCart = buyerService.selectBuyerCartFromRedis(username);
+			//立即销毁cookie
+			Cookie cookie = new Cookie(Constants.BUYER_CART, null);
+			cookie.setPath("/");
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
+		}
+
+		if (null != buyerCart) {
+			List<BuyerItem> items = buyerCart.getItems();
+			if (items.size() > 0) {
+				//4、为购物车加载数据
+				for (BuyerItem buyerItem : items) {
+					buyerItem.setSku(buyerService.selectSkuById(buyerItem.getSku().getId()));
+				}
 			}
 		}
 

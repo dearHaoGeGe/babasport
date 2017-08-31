@@ -62,10 +62,18 @@ public class BuyerServiceImpl implements BuyerService {
 	 */
 	@Override
 	public void insertBuyerCartToRedis(BuyerCart buyerCart, String username) {
+		String key = "buyerCart:" + username;
 		List<BuyerItem> items = buyerCart.getItems();
 		for (BuyerItem b : items) {
-			//向Redis中存key为用户名，sku的id和购买数量
-			jedis.hset("buyerCart:" + username, String.valueOf(b.getSku().getId()), String.valueOf(b.getAmount()));
+			String skuId = String.valueOf(b.getSku().getId());	//把skuId转换成String类型
+			//判断Redis服务器Map指定key中的字段是否存在
+			if (jedis.hexists(key, skuId)) {
+				jedis.hincrBy(key, skuId, b.getAmount());	//Redis服务器Map指定key中的字段以XXX数量增长
+			} else { //如果没有存在的直接set
+				//向Redis中存key为用户名，sku的id和购买数量
+				jedis.hset(key, skuId, String.valueOf(b.getAmount()));
+			}
+
 		}
 	}
 

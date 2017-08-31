@@ -21,7 +21,17 @@ public class BuyerCart implements Serializable {
 	 * @param item
 	 */
 	public void addItem(BuyerItem item) {
-		items.add(item);
+		//判断同款合并
+		if (items.contains(item)) {
+			//追加数量
+			for (BuyerItem buyerItem : items) {
+				if (buyerItem.equals(item)) {
+					buyerItem.setAmount(buyerItem.getAmount() + item.getAmount());
+				}
+			}
+		} else {
+			items.add(item);
+		}
 	}
 
 	public List<BuyerItem> getItems() {
