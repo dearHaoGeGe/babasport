@@ -170,6 +170,11 @@ public class ProductController {
 			//7、登录
 			//整个购物车全追加到redis中
 			buyerService.insertBuyerCartToRedis(buyerCart, username);
+			//清空cookie
+			Cookie cookie = new Cookie(Constants.BUYER_CART, null);
+			cookie.setPath("/");
+			cookie.setMaxAge(0);
+			response.addCookie(cookie);
 		} else {
 			//6、非登录
 			//创建新cookie并把购物车放到cookie中
@@ -215,13 +220,13 @@ public class ProductController {
 				//把cookie中的购物车保存到redis，整个购物车全追加到redis
 				buyerService.insertBuyerCartToRedis(buyerCart, username);
 			}
-			//3、登录获取redis中购物车
-			buyerCart = buyerService.selectBuyerCartFromRedis(username);
 			//立即销毁cookie
 			Cookie cookie = new Cookie(Constants.BUYER_CART, null);
 			cookie.setPath("/");
 			cookie.setMaxAge(0);
 			response.addCookie(cookie);
+			//3、登录获取redis中购物车
+			buyerCart = buyerService.selectBuyerCartFromRedis(username);
 		}
 
 		if (null != buyerCart) {

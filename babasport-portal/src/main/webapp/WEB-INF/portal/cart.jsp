@@ -102,10 +102,10 @@ function trueBuy(){
 					</span>
 					<span class="r box_gray">
 						<dl class="total">
-							<dt>购物车金额小计：<cite>(共<var id="productAmount">3</var>个商品)</cite></dt>
-							<dd><em class="l">商品金额：</em>￥<var id="productPrice">689.01</var>元</dd>
-							<dd><em class="l">运费：</em>￥<var id="fee">0.0</var>元</dd>
-							<dd class="orange"><em class="l">应付总额：</em>￥<var id="totalPrice">689.01</var>元</dd>
+							<dt>购物车金额小计：<cite>(共<var id="productAmount">${buyerCart.productAmount}</var>个商品)</cite></dt>
+							<dd><em class="l">商品金额：</em>￥<var id="productPrice">${buyerCart.productPrice}</var>元</dd>
+							<dd><em class="l">运费：</em>￥<var id="fee">${buyerCart.fee}</var>元</dd>
+							<dd class="orange"><em class="l">应付总额：</em>￥<var id="totalPrice">${buyerCart.totalPrice}</var>元</dd>
 							<dd class="alg_c"><input type="button" onclick="trueBuy();" class="hand btn136x36a" value="结算" id="settleAccountId"></dd>
 						</dl>
 					</span>
