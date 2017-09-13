@@ -46,7 +46,7 @@ $(function(){
 <li title="2.填写核对订单信息" class="here">2.填写核对订单信息</li>
 <li title="3.成功提交订单">3.成功提交订单</li>
 </ul>
-<form action="confirmOrder.jsp" method="post">
+<form action="/buyer/confirmOrder" method="post">
 
 <div class="w ofc case">
 	<h2 class="h2 h2_r mt"><em title="收货人信息">收货人信息      [<a href="#"><font style="color:blue;">修改</font></a>]</em><cite></cite></h2>

@@ -1,6 +1,7 @@
 package com.my.core.service.user;
 
 import com.my.core.bean.BuyerCart;
+import com.my.core.bean.order.Order;
 import com.my.core.bean.product.Sku;
 import com.my.core.bean.user.Buyer;
 
@@ -31,4 +32,9 @@ public interface BuyerService {
 	 * @return
 	 */
 	Sku selectSkuById(Long skuId);
+
+	/**
+	 * 保存订单
+	 */
+	void insertOrder(Order order, String username);
 }

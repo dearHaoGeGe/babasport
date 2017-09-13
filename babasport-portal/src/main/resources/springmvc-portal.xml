@@ -42,5 +42,15 @@
 
 	<!-- 导入dubbo消费者 -->
 	<import resource="dubbo-consumer.xml" />
+	
+	<!-- 拦截器（可以配置多个） -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 规则	 /buyer/index	web.xml -->
+			<mvc:mapping path="/buyer/**" />
+			<!-- 拦截之后处理类 -->
+			<bean class="com.my.core.interceptor.CustomerInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 </beans>

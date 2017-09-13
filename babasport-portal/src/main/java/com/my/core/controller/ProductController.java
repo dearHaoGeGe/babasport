@@ -23,6 +23,7 @@ import com.my.common.utils.RequestUtils;
 import com.my.common.web.Constants;
 import com.my.core.bean.BuyerCart;
 import com.my.core.bean.BuyerItem;
+import com.my.core.bean.order.Order;
 import com.my.core.bean.product.Brand;
 import com.my.core.bean.product.Color;
 import com.my.core.bean.product.Product;
@@ -242,5 +243,55 @@ public class ProductController {
 		//5、回显
 		model.addAttribute("buyerCart", buyerCart);
 		return "cart";
+	}
+
+	/**
+	 * 结算
+	 */
+	@RequestMapping(value = "/buyer/trueBuy")
+	public String trueBuy(HttpServletRequest request, HttpServletResponse response, Model model) {
+		//2、判断购物车中是否有商品
+		//用户名
+		String username = sessionProvider.getAttribute(RequestUtils.getCSESSIONID(request, response));
+		//从redis中取出当前用户的购物车
+		BuyerCart buyerCart = buyerService.selectBuyerCartFromRedis(username);
+		//标记
+		boolean flag = false;
+		//判断购物车中购物项的长度
+		if (buyerCart.getItems().size() > 0) { //有商品
+			//3、是否有货
+			for (BuyerItem item : buyerCart.getItems()) {
+				//装满数据
+				item.setSku(buyerService.selectSkuById(item.getSku().getId()));
+				if (item.getSku().getStock() < item.getAmount()) {
+					//设置无货
+					item.setIsHave(false);
+					//至少有一个商品是无货的
+					flag = true;
+				}
+			}
+
+			if (flag) {
+				//无货
+				model.addAttribute("buyerCart", buyerCart); //回显
+				return "cart";
+			}
+		} else {
+			//无商品
+			return "redirect:/shopping/toCart";
+		}
+		//如果都有货进入下一个页面
+		return "productOrder";
+	}
+
+	/**
+	 * 提交订单
+	 */
+	@RequestMapping(value = "/buyer/confirmOrder")
+	public String confirmOrder(Order order, Model model, HttpServletRequest request, HttpServletResponse response) {
+		//获取用户名
+		String username = sessionProvider.getAttribute(RequestUtils.getCSESSIONID(request, response));
+		buyerService.insertOrder(order, username);
+		return "confirmOrder";
 	}
 }

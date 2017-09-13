@@ -12,7 +12,7 @@
 <script type="text/javascript">
 //结算
 function trueBuy(){
- 	window.location.href = "productOrder.jsp";
+ 	window.location.href = "/buyer/trueBuy?returnUrl=" + window.location.href;
 }
 </script>
 </head>
@@ -40,7 +40,7 @@ function trueBuy(){
 <li title="2.填写核对订单信息">2.填写核对订单信息</li>
 <li title="3.成功提交订单">3.成功提交订单</li>
 </ul>
-<c:if test="${!empty buyerCart}">
+<c:if test="${fn:length(buyerCart.items) != 0}">
 	<div class="w ofc case">
 		<div class="confirm">
 			<div class="tl"></div><div class="tr"></div>
@@ -114,7 +114,7 @@ function trueBuy(){
 		</div>
 	</div>
 </c:if>
-<c:if test="${empty buyerCart}">
+<c:if test="${fn:length(buyerCart.items) == 0}">
 	<div class="w ofc case">
 		<div class="confirm">
 			<div class="tl"></div><div class="tr"></div>
